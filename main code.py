@@ -1,0 +1,61 @@
+import pandas as pd
+import nltk
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import classification_report
+
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+import re
+
+# Sample dummy dataset (replace with real email dataset later)
+data = {
+    'email': [
+        'Hey, want to hang out tomorrow?',  # Personal
+        'Your Amazon order has shipped!',   # Promotions
+        'Meeting rescheduled to 10am.',     # Work
+        'Congratulations! You won a prize!',# Spam
+        'Your bank statement is ready.'     # Finance
+    ],
+    'label': ['Personal', 'Promotions', 'Work', 'Spam', 'Finance']
+}
+
+df = pd.DataFrame(data)
+
+# Preprocessing function
+def clean_text(text):
+    text = re.sub(r'http\S+', '', text)  # remove URLs
+    text = re.sub(r'\W+', ' ', text)  # remove punctuation
+    text = text.lower()
+    stop_words = set(stopwords.words('english'))
+    return ' '.join([word for word in text.split() if word not in stop_words])
+
+df['cleaned'] = df['email'].apply(clean_text)
+
+# TF-IDF vectorization
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(df['cleaned'])
+y = df['label']
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Model training
+model = MultinomialNB()
+model.fit(X_train, y_train)
+
+# Prediction
+y_pred = model.predict(X_test)
+
+# Evaluation
+print(classification_report(y_test, y_pred))
+
+# Test with a new email
+new_email = "Here’s your monthly invoice from Dropbox"
+cleaned_email = clean_text(new_email)
+vectorized_email = vectorizer.transform([cleaned_email])
+prediction = model.predict(vectorized_email)
+
+print(f"\n📧 Email: {new_email}")
+print(f"📁 Predicted Category: {prediction[0]}")
