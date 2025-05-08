@@ -12,11 +12,11 @@ import re
 # Sample dummy dataset (replace with real email dataset later)
 data = {
     'email': [
-        'Hey, want to hang out tomorrow?',  # Personal
-        'Your Amazon order has shipped!',   # Promotions
-        'Meeting rescheduled to 10am.',     # Work
-        'Congratulations! You won a prize!',# Spam
-        'Your bank statement is ready.'     # Finance
+        'Hey, want to hang out tomorrow?', 
+        'Your Amazon order has shipped!',   
+        'Meeting rescheduled to 10am.',     
+        'Congratulations! You won a prize!',
+        'Your bank statement is ready.'     
     ],
     'label': ['Personal', 'Promotions', 'Work', 'Spam', 'Finance']
 }
