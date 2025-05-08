@@ -9,7 +9,6 @@ nltk.download('stopwords')
 from nltk.corpus import stopwords
 import re
 
-# Sample dummy dataset (replace with real email dataset later)
 data = {
     'email': [
         'Hey, want to hang out tomorrow?', 
